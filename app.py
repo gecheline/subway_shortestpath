@@ -63,6 +63,7 @@ if uploaded_file is not None:
     fig = plt.figure(figsize=(20,10))
     nx.draw_networkx_nodes(G, pos=posList, node_size=node_sizes, node_color='cornflowerblue')
     nx.draw_networkx_labels(G, pos=posList, font_color='white')
+    
     nx.draw_networkx_edges(G, pos=posList, edge_color=edges_colors, width=edges_widths, arrowstyle='->', arrowsize=15)
     st.pyplot(fig=fig)
 
@@ -84,12 +85,16 @@ if uploaded_file is not None:
 
         fig2 = plt.figure(figsize=(20,10))
         nodes = nx.draw_networkx_nodes(G, pos=posList, node_size=node_sizes, node_color='cornflowerblue')
-        labels = nx.draw_networkx_labels(G, pos=posList, font_color='white')
+        node_labels = nx.draw_networkx_labels(G, pos=posList, font_color='white')
+        edge_labels = dict([((u,v,), f"{d['weight']:.4f}") for u,v,d in G.edges(data=True)])
+        # edge_labels = nx.get_edge_attributes(G,'weight')
         edges = nx.draw_networkx_edges(G, pos=posList, edge_color=edges_colors, width=edges_widths, arrowstyle='->', arrowsize=15)
 
         M = G.number_of_edges()
         for i in range(M):
             edges[i].set_alpha(edges_alphas[i])
+
+        nx.draw_networkx_edge_labels(G,pos=posList,edge_labels=edge_labels, bbox={'boxstyle':'round', 'ec':(1.0, 1.0, 1.0, 0.0), 'fc':(1.0, 1.0, 1.0, 0.0)})
 
 
         st.pyplot(fig=fig2)
