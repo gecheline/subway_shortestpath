@@ -56,7 +56,7 @@ if uploaded_file is not None:
         edges_widths.append(5*len(colors_list))
         edges_colors.append('lightgrey' if len(colors_list)>1 else colors_list[0])
 
-    st.write("To implement algorithms for shortest path calculation, we need to transform this data into a more computer-understandable format, like an adjacency matrix or set. Here you can read more about how these methods work: https://medium.com/outco/how-to-build-a-graph-data-structure-d779d822f9b4. We'll use the adjacency set format here, in which each station has associated with it its neighbors and the distances to each:")
+    st.write("To implement algorithms for shortest path calculation, we need to transform this data into a more computer-understandable format, like an adjacency matrix or set. [Here](https://medium.com/outco/how-to-build-a-graph-data-structure-d779d822f9b4) you can read more about what these formats look like. We'll use the adjacency set format here, in which each station has associated with it its neighbors and the distances to each:")
     st.write(adj_set)
 
     st.write("Now we can use the adjacency set to visualize the subway map as a graph, where each station represents a 'node', marked with a circle. The path between each pair of connected stations is represented by a graph 'edge', marked with lines. You'll notice that each edge has arrows pointing to each station. This is called a directed graph (the arrow signifies a direction). Here we've assumed that the subway goes in both directions between each pair of stations. An edge with an arrow pointing only one way would mean that there is only a one-way connection between two stations. We won't be dealing with those here for simplicity!")
@@ -66,7 +66,7 @@ if uploaded_file is not None:
     nx.draw_networkx_edges(G, pos=posList, edge_color=edges_colors, width=edges_widths, arrowstyle='->', arrowsize=15)
     st.pyplot(fig=fig)
 
-    st.write("Now choose a pair of stations between which to calculate the shortest distance along the subway graph. The code implemented here uses Dijkstra's algorithm, a classic method for finding the shortest path along the graph. You can learn more about it here: https://algorithms.discrete.ma.tum.de/graph-algorithms/spp-dijkstra/index_en.html . Keep in mind that this algorithm only knows about the graph nodes, edges and the distances along each edge measured in angular distance (we compute this using the latitude and longitude of each station). It's not aware of the specific subway lines so sometimes it may lead to several unnecessary transfers! Can you think of how we can improve or penalize it to lead to less transfers?")
+    st.write("Now choose a pair of stations between which to calculate the shortest distance along the subway graph. The code implemented here uses Dijkstra's algorithm, a classic method for finding the shortest path along the graph. You can learn more about it through this [simulation](https://algorithms.discrete.ma.tum.de/graph-algorithms/spp-dijkstra/index_en.html). Keep in mind that this algorithm only knows about the graph nodes, edges and the distances along each edge measured in angular distance (we compute this using the latitude and longitude of each station). It's not aware of the specific subway lines so sometimes it may lead to several unnecessary transfers! Can you think of how we can improve or penalize it to lead to less transfers?")
     col1, col2 = st.columns(2)
     with col1:
         start_station = st.selectbox('Choose a start station:', nodelist.keys())
