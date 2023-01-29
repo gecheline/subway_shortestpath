@@ -1,5 +1,19 @@
 import numpy as np
 import pandas as pd
+import streamlit as st
+
+def haversine_func_distance(station1_coords, station2_coords):
+
+    [lat1, lng1] = list(station1_coords)
+    [lat2, lng2] = list(station2_coords)
+    lat1_rad, lat2_rad, lng1_rad, lng2_rad = np.radians(lat1), np.radians(lat2), np.radians(lng1), np.radians(lng2)
+    sin2lat = (np.sin(0.5*(lat2_rad-lat1_rad)))**2
+    sin2lng = (np.sin(0.5*(lng2_rad-lng1_rad)))**2
+    cos1 = np.cos(lat1_rad)
+    cos2 = np.cos(lat2_rad)
+    r = 3958.8 #miles
+
+    return 2*r*np.arcsin((sin2lat+cos1*cos2*sin2lng)**0.5)
 
 
 def clean_data(data_json):
@@ -25,14 +39,14 @@ def find_neighbors_and_distances(station, lines_df, stations_df):
         if station_arg - 1 >= 0:
             left_station_id = line_info_stations[station_arg-1]
             left_station = stations_df[stations_df['id']==left_station_id]
-            left_station_coords = stations_df[stations_df['id']==left_station_id][['lat', 'lng']].values
-            left_station_distance = np.sum((station_coords - left_station_coords)**2)
+            left_station_coords = stations_df[stations_df['id']==left_station_id][['lat', 'lng']].values[0]
+            left_station_distance = haversine_func_distance(station_coords, left_station_coords)
             neighbors[left_station_id] = left_station_distance
         if station_arg + 1 < len(line_info_stations):
             right_station_id = line_info_stations[station_arg+1]
             right_station = stations_df[stations_df['id']==right_station_id]
-            right_station_coords = stations_df[stations_df['id']==right_station_id][['lat', 'lng']].values
-            right_station_distance = np.sum((station_coords - right_station_coords)**2)
+            right_station_coords = stations_df[stations_df['id']==right_station_id][['lat', 'lng']].values[0]
+            right_station_distance = haversine_func_distance(station_coords, right_station_coords)
             neighbors[right_station_id] = right_station_distance
 
     return neighbors
