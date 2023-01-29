@@ -67,7 +67,7 @@ if uploaded_file is not None:
     nx.draw_networkx_edges(G, pos=posList, edge_color=edges_colors, width=edges_widths, arrowstyle='->', arrowsize=15)
     st.pyplot(fig=fig)
 
-    st.write("Now choose a pair of stations between which to calculate the shortest distance along the subway graph. The code implemented here uses Dijkstra's algorithm, a classic method for finding the shortest path along the graph. You can learn more about it through this [simulation](https://algorithms.discrete.ma.tum.de/graph-algorithms/spp-dijkstra/index_en.html). Keep in mind that this algorithm only knows about the graph nodes, edges and the distances along each edge measured in angular distance (we compute this using the latitude and longitude of each station). It's not aware of the specific subway lines so sometimes it may lead to several unnecessary transfers! Can you think of how we can improve or penalize it to lead to less transfers?")
+    st.write("Now choose a pair of stations between which to calculate the shortest distance along the subway graph. The code implemented here uses Dijkstra's algorithm, a classic method for finding the shortest path along the graph. You can learn more about it through this [simulation](https://algorithms.discrete.ma.tum.de/graph-algorithms/spp-dijkstra/index_en.html). Keep in mind that this algorithm only knows about the graph nodes, edges and the distances along each edge measured in angular distance (we compute this using the latitude and longitude of each station). It's not aware of the specific subway lines or travel times, so sometimes it may lead to several unnecessary transfers! Can you think of how we can improve or penalize it to lead to less transfers?")
     col1, col2 = st.columns(2)
     with col1:
         start_station = st.selectbox('Choose a start station:', nodelist.keys())
@@ -87,6 +87,7 @@ if uploaded_file is not None:
         nodes = nx.draw_networkx_nodes(G, pos=posList, node_size=node_sizes, node_color='cornflowerblue')
         node_labels = nx.draw_networkx_labels(G, pos=posList, font_color='white')
         edge_labels = dict([((u,v,), f"{d['weight']:.4f}") for u,v,d in G.edges(data=True)])
+        edge_labels_miles = dict([((u,v,), f"{d['weight']*69.2:.2f}") for u,v,d in G.edges(data=True)])
         # edge_labels = nx.get_edge_attributes(G,'weight')
         edges = nx.draw_networkx_edges(G, pos=posList, edge_color=edges_colors, width=edges_widths, arrowstyle='->', arrowsize=15)
 
@@ -94,11 +95,12 @@ if uploaded_file is not None:
         for i in range(M):
             edges[i].set_alpha(edges_alphas[i])
 
-        nx.draw_networkx_edge_labels(G,pos=posList,edge_labels=edge_labels, bbox={'boxstyle':'round', 'ec':(1.0, 1.0, 1.0, 0.0), 'fc':(1.0, 1.0, 1.0, 0.0)})
+        nx.draw_networkx_edge_labels(G,pos=posList,edge_labels=edge_labels_miles, bbox={'boxstyle':'round', 'ec':(1.0, 1.0, 1.0, 0.0), 'fc':(1.0, 1.0, 1.0, 0.0)})
 
 
         st.pyplot(fig=fig2)
-        st.write(f"Shortest path length: {shortest_path_length}")
+        st.write(f"Shortest path length: {shortest_path_length*69.2} miles.")
+        st.write(f"*Note that in the map above we have converted the angular distance into miles for more intuitive understanding of the distances along the subway lines.*")
 
 
     
