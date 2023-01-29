@@ -39,12 +39,15 @@ def find_neighbors_and_distances(station, lines_df, stations_df):
 
 def construct_nodelist_adjacency_set(stations_df, lines_df):
     nodelist = {}
+    node_sizes = []
     adjacency_set = {}
     for index, station in stations_df.iterrows():
         if station['active']:
             nodelist[station['id']] = station[['lat', 'lng']].values
+            node_sizes.append(200*len(station['lines']))
             adjacency_set[station['id']] = find_neighbors_and_distances(station, lines_df, stations_df)
-    return nodelist, adjacency_set
+
+    return nodelist, node_sizes, adjacency_set
 
 def make_path_edges(shortest_path):
     edges = []
